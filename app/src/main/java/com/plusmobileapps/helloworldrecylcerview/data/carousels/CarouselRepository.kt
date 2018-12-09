@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.plusmobileapps.helloworldrecylcerview.view.CarouselItem
 
-class CarouselRepository {
+object CarouselRepository {
 
     private val carousels = MutableLiveData<List<CarouselItem>>().apply {
         value = listOf(

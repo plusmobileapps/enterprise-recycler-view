@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 
 data class Card(val id: Int, val header: String, val imageUrl: String, val body: String)
 
-class CardsRepository {
+object CardsRepository {
 
     private val cards = MutableLiveData<List<Card>>().apply {
         value = listOf(
@@ -31,5 +31,8 @@ class CardsRepository {
     }
 
     fun getCards(): LiveData<List<Card>> = cards
+
+    fun getCard(id: Int): Card? = cards.value?.find { it.id == id }
+
 
 }

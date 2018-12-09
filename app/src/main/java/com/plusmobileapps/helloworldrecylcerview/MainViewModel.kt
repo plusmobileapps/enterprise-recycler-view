@@ -12,8 +12,8 @@ interface View {
 }
 
 class MainViewModel(private val stateReducer: StateReducer = StateReducer(),
-                    private val cardsRepository: CardsRepository = CardsRepository(),
-                    private val carouselsRepository: CarouselRepository = CarouselRepository()
+                    private val cardsRepository: CardsRepository = CardsRepository,
+                    private val carouselsRepository: CarouselRepository = CarouselRepository
 ) : ViewModel(), View {
 
     private val mediator = MediatorLiveData<DataWrapper>().apply {
