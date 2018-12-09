@@ -18,4 +18,7 @@ interface CountryDao {
     @Delete
     fun delete(country: Country)
 
+    @Query("DELETE FROM Country WHERE id IN (:countryId)")
+    fun delete(countryId: Int)
+
 }

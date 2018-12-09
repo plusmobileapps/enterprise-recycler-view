@@ -9,6 +9,7 @@ import javax.inject.Inject
 interface View {
     fun onCarouselItemClicked(carouselItem: CarouselItem)
     fun onCardClicked(card: DataWrapper.CardData)
+    fun onCardDeleted(card: DataWrapper.CardData)
 }
 
 data class Card(val id: Int, val header: String, val imageUrl: String, val body: String)
@@ -52,5 +53,9 @@ class MainViewModel @Inject constructor(private val stateReducer: StateReducer,
 
     override fun onCardClicked(card: DataWrapper.CardData) {
         cardClicked.value = card.id
+    }
+
+    override fun onCardDeleted(card: DataWrapper.CardData) {
+        countryRepository.delete(card.id)
     }
 }

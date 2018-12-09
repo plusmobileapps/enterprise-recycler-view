@@ -21,4 +21,9 @@ class CountryRepository(private val countryDao: CountryDao) : CountryDao {
         }
     }
 
+    override fun delete(countryId: Int) {
+        doAsync {
+            countryDao.delete(countryId)
+        }
+    }
 }

@@ -76,6 +76,7 @@ class RecyclerViewDiffUtil : DiffUtil.ItemCallback<DataWrapper>() {
  */
 class RecyclerViewListAdapter(private val carouselItemClickListener: (CarouselItem) -> Unit,
                               private val cardClickListener: (DataWrapper.CardData) -> Unit,
+                              private val cardDeleteListener: (DataWrapper.CardData) -> Unit,
                               private val glide: RequestManager)
     : ListAdapter<DataWrapper, BaseViewHolder<*>>(
     RecyclerViewDiffUtil()
@@ -90,6 +91,7 @@ class RecyclerViewListAdapter(private val carouselItemClickListener: (CarouselIt
 
 
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
         return when (viewType) {
@@ -100,7 +102,8 @@ class RecyclerViewListAdapter(private val carouselItemClickListener: (CarouselIt
             R.layout.card_view_holder -> CardViewHolder(
                 view,
                 glide,
-                cardClickListener
+                cardClickListener,
+                cardDeleteListener
             )
             else -> throw IllegalStateException("There is no layout file for $viewType in this recycler view")
         }

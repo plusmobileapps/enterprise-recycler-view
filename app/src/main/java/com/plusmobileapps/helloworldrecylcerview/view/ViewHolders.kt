@@ -26,11 +26,13 @@ abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemV
  */
 class CardViewHolder(itemView: View,
                      private val glide: RequestManager,
-                     private val clickListener: (DataWrapper.CardData) -> Unit) : BaseViewHolder<DataWrapper.CardData>(itemView) {
+                     private val clickListener: (DataWrapper.CardData) -> Unit,
+                     private val deleteListener: (DataWrapper.CardData) -> Unit) : BaseViewHolder<DataWrapper.CardData>(itemView) {
 
     private val header = itemView.findViewById<TextView>(R.id.header)
     private val body = itemView.findViewById<TextView>(R.id.body)
     private val image = itemView.findViewById<ImageView>(R.id.image)
+    private val deleteButton = itemView.findViewById<ImageView>(R.id.delete_button)
 
 
     override fun bind(data: DataWrapper.CardData) {
@@ -38,6 +40,7 @@ class CardViewHolder(itemView: View,
         body.text = data.body
         glide.load(data.imageUrl).into(image)
         itemView.setOnClickListener { clickListener(data) }
+        deleteButton.setOnClickListener { deleteListener(data) }
     }
 
 }

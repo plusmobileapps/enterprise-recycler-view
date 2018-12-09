@@ -33,6 +33,7 @@ class MainFragment : Fragment() {
         val adapter = RecyclerViewListAdapter(
             carouselItemClickListener = { viewModel.onCarouselItemClicked(it) },
             cardClickListener = { viewModel.onCardClicked(it) },
+            cardDeleteListener = { viewModel.onCardDeleted(it) },
             glide = Glide.with(this)
         )
 
