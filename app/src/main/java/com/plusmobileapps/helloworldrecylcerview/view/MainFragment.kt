@@ -11,26 +11,33 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.plusmobileapps.helloworldrecylcerview.MainViewModel
+import com.plusmobileapps.helloworldrecylcerview.MyApplication
 import com.plusmobileapps.helloworldrecylcerview.R
+import com.plusmobileapps.helloworldrecylcerview.di.ViewModelFactory
+import javax.inject.Inject
 
 class MainFragment : Fragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        MyApplication.appComponent.inject(this)
 
+        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         val adapter = RecyclerViewListAdapter(
             carouselItemClickListener = { viewModel.onCarouselItemClicked(it) },
             cardClickListener = { viewModel.onCardClicked(it) },
             glide = Glide.with(this)
         )
 
-        view.findViewById<RecyclerView>(R.id.recyclerview).apply {
-            this.adapter = adapter
+        view?.findViewById<RecyclerView>(R.id.recyclerview).apply {
+            this?.adapter = adapter
         }
 
         with(viewModel) {
@@ -48,7 +55,6 @@ class MainFragment : Fragment() {
                 openCarouselItem(id)
             })
         }
-
     }
 
     private fun openCard(id: Int) {

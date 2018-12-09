@@ -1,27 +1,47 @@
 package com.plusmobileapps.helloworldrecylcerview
 
 import androidx.lifecycle.*
-import com.plusmobileapps.helloworldrecylcerview.data.cards.CardsRepository
-import com.plusmobileapps.helloworldrecylcerview.data.carousels.CarouselRepository
+import com.plusmobileapps.helloworldrecylcerview.data.*
 import com.plusmobileapps.helloworldrecylcerview.view.CarouselItem
 import com.plusmobileapps.helloworldrecylcerview.view.DataWrapper
+import javax.inject.Inject
 
 interface View {
     fun onCarouselItemClicked(carouselItem: CarouselItem)
     fun onCardClicked(card: DataWrapper.CardData)
 }
 
-class MainViewModel(private val stateReducer: StateReducer = StateReducer(),
-                    private val cardsRepository: CardsRepository = CardsRepository,
-                    private val carouselsRepository: CarouselRepository = CarouselRepository
+data class Card(val id: Int, val header: String, val imageUrl: String, val body: String)
+
+class MainViewModel @Inject constructor(private val stateReducer: StateReducer,
+                    private val countryRepository: CountryRepository
 ) : ViewModel(), View {
 
-    private val mediator = MediatorLiveData<DataWrapper>().apply {
-        addSource(cardsRepository.getCards()) { stateReducer.onCardsLoaded(it) }
-        addSource(carouselsRepository.getCarousels()) { stateReducer.onCarouselItemsLoaded(it) }
+    private val bigCards: LiveData<List<Card>> = Transformations.map(countryRepository.getAll()) { countries ->
+        return@map countries.map { country ->
+            Card(country.id!!, country.name, country.imageUrl, country.description)
+        }
     }
 
-    fun start(): LiveData<DataWrapper> = mediator
+    private val topCarousel: LiveData<List<CarouselItem>> = Transformations.map(countryRepository.getAll()) { countries ->
+        return@map countries.map { country ->
+            CarouselItem(country.id!!, country.name, country.description)
+        }
+    }
+
+    private val bottomCarousel: LiveData<List<CarouselItem>> = Transformations.map(countryRepository.getAll()) { countries ->
+        return@map countries.map { country ->
+            CarouselItem(country.id!!, country.name, country.description)
+        }
+    }
+
+    private val mediator = MediatorLiveData<DataWrapper>().apply {
+        addSource(topCarousel) { stateReducer.onTopCarouselLoaded(it) }
+        addSource(bigCards) { stateReducer.onCardsLoaded(it) }
+        addSource(bottomCarousel) { stateReducer.onBottomCarouselLoaded(it) }
+    }
+
+    fun start(): LiveData<Unit> = Transformations.map(mediator, { return@map Unit })
     fun getData(): LiveData<List<DataWrapper>> = stateReducer.getData()
     val cardClicked = SingleLiveEvent<Int>()
     val carouselItemClicked = SingleLiveEvent<Int>()

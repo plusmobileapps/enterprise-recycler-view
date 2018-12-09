@@ -1,7 +1,5 @@
 package com.plusmobileapps.helloworldrecylcerview.view
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.plusmobileapps.helloworldrecylcerview.MyApplication
 
 import com.plusmobileapps.helloworldrecylcerview.R
-import com.plusmobileapps.helloworldrecylcerview.data.cards.CardsRepository
+import com.plusmobileapps.helloworldrecylcerview.di.ViewModelFactory
 import java.lang.IllegalStateException
+import javax.inject.Inject
 
 private const val COUNTRY_ID = "country id"
 
@@ -22,6 +24,9 @@ class CountryDetailFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var header: TextView
     private lateinit var body: TextView
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,14 +47,22 @@ class CountryDetailFragment : Fragment() {
             header = findViewById(R.id.header)
             body = findViewById(R.id.body)
         }
+    }
 
-        val cardId = id ?: throw IllegalStateException("No id was set on this fragment")
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val countryId = id ?: throw IllegalStateException("No id was set on this fragment")
 
-        val card = CardsRepository.getCard(cardId) ?: throw IllegalStateException("Requested Id was not in the repository")
+        MyApplication.appComponent.inject(this)
+        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(CountryDetailViewModel::class.java)
 
-        Glide.with(this).load(card.imageUrl).into(imageView)
-        header.text = card.header
-        body.text = card.body
+        val card = viewModel.getCountry(countryId)
+        card.observe(this, Observer { country ->
+            Glide.with(this).load(country.imageUrl).into(imageView)
+            header.text = country.name
+            body.text = country.description
+        })
+
     }
 
     companion object {
