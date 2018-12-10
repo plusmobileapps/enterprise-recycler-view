@@ -36,14 +36,14 @@ class MainViewModel @Inject constructor(private val stateReducer: StateReducer,
         }
     }
 
-    private val mediator = MediatorLiveData<DataWrapper>().apply {
+    private val mediator = MediatorLiveData<List<DataWrapper>>().apply {
         addSource(topCarousel) { stateReducer.onTopCarouselLoaded(it) }
         addSource(bigCards) { stateReducer.onCardsLoaded(it) }
         addSource(bottomCarousel) { stateReducer.onBottomCarouselLoaded(it) }
+        addSource(stateReducer.getData()) { t: List<DataWrapper>? -> value = t }
     }
 
-    fun start(): LiveData<Unit> = Transformations.map(mediator, { return@map Unit })
-    fun getData(): LiveData<List<DataWrapper>> = stateReducer.getData()
+    fun getData(): LiveData<List<DataWrapper>> = mediator
     val cardClicked = SingleLiveEvent<Int>()
     val carouselItemClicked = SingleLiveEvent<Int>()
 

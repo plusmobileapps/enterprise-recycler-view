@@ -42,10 +42,8 @@ class MainFragment : Fragment() {
         }
 
         with(viewModel) {
-            start().observe(this@MainFragment, Observer {  })
-
-            getData().observe(this@MainFragment, Observer { list ->
-                adapter.submitList(list)
+            getData().observe(this@MainFragment, Observer { data ->
+                adapter.submitList(data)
             })
 
             cardClicked.observe(this@MainFragment, Observer { id ->
