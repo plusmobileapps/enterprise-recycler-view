@@ -8,6 +8,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        //initialize dependency injection
         startKoin(this, listOf(appModule))
     }
 }

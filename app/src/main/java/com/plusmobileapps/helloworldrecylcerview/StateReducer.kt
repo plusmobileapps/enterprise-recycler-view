@@ -9,6 +9,11 @@ import com.plusmobileapps.helloworldrecylcerview.viewmodels.Card
 private const val TOP_CAROUSEL_ID = -42
 private const val BOTTOM_CAROUSEL_ID = -34
 
+
+/**
+ * State reducer keeps track of one master list, and reduces all different types
+ * of data into the one master list
+ */
 class StateReducer {
 
     private val masterList = MutableLiveData<List<DataWrapper>>()
