@@ -13,13 +13,11 @@ import com.bumptech.glide.Glide
 import com.plusmobileapps.helloworldrecylcerview.MainViewModel
 import com.plusmobileapps.helloworldrecylcerview.MyApplication
 import com.plusmobileapps.helloworldrecylcerview.R
-import com.plusmobileapps.helloworldrecylcerview.di.ViewModelFactory
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    val viewModel: MainViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main, container, false)
@@ -27,9 +25,7 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        MyApplication.appComponent.inject(this)
 
-        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         val adapter = RecyclerViewListAdapter(
             carouselItemClickListener = { viewModel.onCarouselItemClicked(it) },
             cardClickListener = { viewModel.onCardClicked(it) },

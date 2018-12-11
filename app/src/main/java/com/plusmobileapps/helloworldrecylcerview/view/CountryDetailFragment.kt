@@ -1,21 +1,16 @@
 package com.plusmobileapps.helloworldrecylcerview.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.plusmobileapps.helloworldrecylcerview.MyApplication
-
 import com.plusmobileapps.helloworldrecylcerview.R
-import com.plusmobileapps.helloworldrecylcerview.di.ViewModelFactory
-import java.lang.IllegalStateException
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val COUNTRY_ID = "country id"
 
@@ -25,8 +20,7 @@ class CountryDetailFragment : Fragment() {
     private lateinit var header: TextView
     private lateinit var body: TextView
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    val viewModel: CountryDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +46,6 @@ class CountryDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val countryId = id ?: throw IllegalStateException("No id was set on this fragment")
-
-        MyApplication.appComponent.inject(this)
-        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(CountryDetailViewModel::class.java)
-
         val card = viewModel.getCountry(countryId)
         card.observe(this, Observer { country ->
             Glide.with(this).load(country.imageUrl).into(imageView)

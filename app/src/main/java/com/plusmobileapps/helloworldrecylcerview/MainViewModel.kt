@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.plusmobileapps.helloworldrecylcerview.data.*
 import com.plusmobileapps.helloworldrecylcerview.view.CarouselItem
 import com.plusmobileapps.helloworldrecylcerview.view.DataWrapper
-import javax.inject.Inject
 
 interface View {
     fun onCarouselItemClicked(carouselItem: CarouselItem)
@@ -14,7 +13,7 @@ interface View {
 
 data class Card(val id: Int, val header: String, val imageUrl: String, val body: String)
 
-class MainViewModel @Inject constructor(private val stateReducer: StateReducer,
+class MainViewModel (private val stateReducer: StateReducer,
                     private val countryRepository: CountryRepository
 ) : ViewModel(), View {
 
