@@ -5,12 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.plusmobileapps.helloworldrecylcerview.data.cities.City
+import com.plusmobileapps.helloworldrecylcerview.data.cities.CityDao
+import com.plusmobileapps.helloworldrecylcerview.data.country.Country
+import com.plusmobileapps.helloworldrecylcerview.data.country.CountryDao
 import org.jetbrains.anko.doAsync
 
-@Database(entities = arrayOf(Country::class), version = 1)
+@Database(entities = arrayOf(Country::class, City::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun countryDao(): CountryDao
+
+    abstract fun cityDao(): CityDao
 
     companion object {
         @Volatile
@@ -30,13 +36,50 @@ abstract class AppDatabase : RoomDatabase() {
             ).addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    doAsync { insertCountries(getInstance(context).countryDao()) }
+                    doAsync {
+                        val roomDatabase = getInstance(context)
+                        insertCities(roomDatabase.cityDao())
+                        insertCountries(roomDatabase.countryDao())
+                    }
                 }
             })
                 .build()
         }
     }
 
+}
+
+fun insertCities(cityDao: CityDao) {
+    with(cityDao) {
+        insert(
+            City(
+                name = "Hamburg",
+                country = "Germany",
+                description = "Hamburg is the second-largest city in Germany with a population of over 1.8 million. One of Germany's 16 federal states, it is surrounded by Schleswig-Holstein ..."
+            )
+        )
+        insert(
+            City(
+                name = "Seattle",
+                country = "USA",
+                description = "Seattle is a seaport city on the West Coast of the United States. It is the seat of King County, Washington. With an estimated 730,000 residents as of 2018, Seattle ..."
+            )
+        )
+        insert(
+            City(
+                name = "London",
+                country = "UK",
+                description = "London is the capital and largest city of both the United Kingdom and England. Standing on the River Thames in southeastern England, 50 miles (80 km) ..."
+            )
+        )
+        insert(
+            City(
+                name = "Paris",
+                country = "France",
+                description = "Paris is the capital and most populous city of France, with an area of 105 square kilometres (41 square miles) and a population of 2,206,488. Since the 17th ..."
+            )
+        )
+    }
 }
 
 fun insertCountries(countryDao: CountryDao) {

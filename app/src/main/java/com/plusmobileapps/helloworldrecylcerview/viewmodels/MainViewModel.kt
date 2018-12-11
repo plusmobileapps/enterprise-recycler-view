@@ -3,7 +3,8 @@ package com.plusmobileapps.helloworldrecylcerview.viewmodels
 import androidx.lifecycle.*
 import com.plusmobileapps.helloworldrecylcerview.SingleLiveEvent
 import com.plusmobileapps.helloworldrecylcerview.StateReducer
-import com.plusmobileapps.helloworldrecylcerview.data.*
+import com.plusmobileapps.helloworldrecylcerview.data.cities.CityRepository
+import com.plusmobileapps.helloworldrecylcerview.data.country.CountryRepository
 import com.plusmobileapps.helloworldrecylcerview.view.CarouselItem
 import com.plusmobileapps.helloworldrecylcerview.view.DataWrapper
 
@@ -28,7 +29,8 @@ data class Card(val id: Int, val header: String, val imageUrl: String, val body:
  * @property openCarouselItemLiveEvent an event that will emit the id for the country to open in the [com.plusmobileapps.helloworldrecylcerview.view.CountryDetailFragment]
  */
 class MainViewModel (private val stateReducer: StateReducer,
-                     private val countryRepository: CountryRepository
+                     private val countryRepository: CountryRepository,
+                     private val cityRepository: CityRepository
 ) : ViewModel(), MainView {
 
     private val bigCards: LiveData<List<Card>> = Transformations.map(countryRepository.getAll()) { countries ->
@@ -42,9 +44,9 @@ class MainViewModel (private val stateReducer: StateReducer,
         }
     }
 
-    private val topCarousel: LiveData<List<CarouselItem>> = Transformations.map(countryRepository.getAll()) { countries ->
-        return@map countries.map { country ->
-            CarouselItem(country.id!!, country.name, country.description)
+    private val topCarousel: LiveData<List<CarouselItem>> = Transformations.map(cityRepository.getAll()) { cities ->
+        return@map cities.map { city ->
+            CarouselItem(city.id!!, city.name, city.description)
         }
     }
 

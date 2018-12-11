@@ -1,4 +1,4 @@
-package com.plusmobileapps.helloworldrecylcerview.data
+package com.plusmobileapps.helloworldrecylcerview.data.country
 
 import androidx.lifecycle.LiveData
 import org.jetbrains.anko.doAsync
