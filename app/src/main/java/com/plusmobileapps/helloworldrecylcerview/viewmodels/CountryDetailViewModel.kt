@@ -1,4 +1,4 @@
-package com.plusmobileapps.helloworldrecylcerview.view
+package com.plusmobileapps.helloworldrecylcerview.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.plusmobileapps.helloworldrecylcerview.data.CountryRepository

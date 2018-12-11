@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.plusmobileapps.helloworldrecylcerview.view.CarouselItem
 import com.plusmobileapps.helloworldrecylcerview.view.DataWrapper
-import java.util.*
+import com.plusmobileapps.helloworldrecylcerview.viewmodels.Card
 
 private const val TOP_CAROUSEL_ID = -42
 private const val BOTTOM_CAROUSEL_ID = -34

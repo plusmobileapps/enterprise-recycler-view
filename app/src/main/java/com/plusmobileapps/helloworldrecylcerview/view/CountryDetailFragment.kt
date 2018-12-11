@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.plusmobileapps.helloworldrecylcerview.R
+import com.plusmobileapps.helloworldrecylcerview.viewmodels.CountryDetailViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val COUNTRY_ID = "country id"

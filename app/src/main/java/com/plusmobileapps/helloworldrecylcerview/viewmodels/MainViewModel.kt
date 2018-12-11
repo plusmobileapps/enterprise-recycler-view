@@ -1,6 +1,8 @@
-package com.plusmobileapps.helloworldrecylcerview
+package com.plusmobileapps.helloworldrecylcerview.viewmodels
 
 import androidx.lifecycle.*
+import com.plusmobileapps.helloworldrecylcerview.SingleLiveEvent
+import com.plusmobileapps.helloworldrecylcerview.StateReducer
 import com.plusmobileapps.helloworldrecylcerview.data.*
 import com.plusmobileapps.helloworldrecylcerview.view.CarouselItem
 import com.plusmobileapps.helloworldrecylcerview.view.DataWrapper
@@ -14,12 +16,17 @@ interface View {
 data class Card(val id: Int, val header: String, val imageUrl: String, val body: String)
 
 class MainViewModel (private val stateReducer: StateReducer,
-                    private val countryRepository: CountryRepository
+                     private val countryRepository: CountryRepository
 ) : ViewModel(), View {
 
     private val bigCards: LiveData<List<Card>> = Transformations.map(countryRepository.getAll()) { countries ->
         return@map countries.map { country ->
-            Card(country.id!!, country.name, country.imageUrl, country.description)
+            Card(
+                country.id!!,
+                country.name,
+                country.imageUrl,
+                country.description
+            )
         }
     }
 
