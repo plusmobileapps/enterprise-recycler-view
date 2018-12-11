@@ -31,7 +31,6 @@ class CountryDetailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_country_detail, container, false)
     }
 
@@ -57,19 +56,11 @@ class CountryDetailFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CountryDetailFragment.
-         */
         @JvmStatic
-        fun newInstance(param1: Int) =
+        fun newInstance(countryId: Int) =
             CountryDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(COUNTRY_ID, param1)
+                    putInt(COUNTRY_ID, countryId)
                 }
             }
     }

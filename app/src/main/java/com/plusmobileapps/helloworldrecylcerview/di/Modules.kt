@@ -12,13 +12,11 @@ import org.koin.dsl.module.module
 
 val appModule = module {
 
-
-    single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
-    single<CountryDao> { get<AppDatabase>().countryDao() }
+    single { AppDatabase.getInstance(androidApplication()) }
+    single { get<AppDatabase>().countryDao() }
     single { CountryRepository(get()) }
     factory { StateReducer() }
     viewModel { MainViewModel(get(), get()) }
     viewModel { CountryDetailViewModel(get()) }
-
 
 }

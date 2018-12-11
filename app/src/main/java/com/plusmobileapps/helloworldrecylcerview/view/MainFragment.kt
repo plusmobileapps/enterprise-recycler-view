@@ -40,11 +40,11 @@ class MainFragment : Fragment() {
                 adapter.submitList(data)
             })
 
-            cardClicked.observe(this@MainFragment, Observer { id ->
+            openCardLiveEvent.observe(this@MainFragment, Observer { id ->
                 openCard(id)
             })
 
-            carouselItemClicked.observe(this@MainFragment, Observer {  id ->
+            openCarouselItemLiveEvent.observe(this@MainFragment, Observer { id ->
                 openCarouselItem(id)
             })
         }

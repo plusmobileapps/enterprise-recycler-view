@@ -24,7 +24,8 @@ sealed class DataWrapper {
      *
      * @property items list of carousel items that will be submitted to [CarouselListAdapter]
      */
-    data class CarouselData(override val id: Int = UUID.randomUUID().hashCode(), val items: List<CarouselItem>) : DataWrapper()
+    data class CarouselData(override val id: Int = UUID.randomUUID().hashCode(), val items: List<CarouselItem>) :
+        DataWrapper()
 
     /**
      * model for a single card of data
@@ -33,7 +34,8 @@ sealed class DataWrapper {
      * @property imageUrl url to be used with glide to load images
      * @property body smaller text on the card for details
      */
-    data class CardData(override val id: Int, val header: String, val imageUrl: String, val body: String) : DataWrapper()
+    data class CardData(override val id: Int, val header: String, val imageUrl: String, val body: String) :
+        DataWrapper()
 }
 
 
@@ -74,23 +76,21 @@ class RecyclerViewDiffUtil : DiffUtil.ItemCallback<DataWrapper>() {
  * @property cardClickListener click listener for the big cards in the recyclerview
  * @property glide image loading request manager
  */
-class RecyclerViewListAdapter(private val carouselItemClickListener: (CarouselItem) -> Unit,
-                              private val cardClickListener: (DataWrapper.CardData) -> Unit,
-                              private val cardDeleteListener: (DataWrapper.CardData) -> Unit,
-                              private val glide: RequestManager)
-    : ListAdapter<DataWrapper, BaseViewHolder<*>>(
+class RecyclerViewListAdapter(
+    private val carouselItemClickListener: (CarouselItem) -> Unit,
+    private val cardClickListener: (DataWrapper.CardData) -> Unit,
+    private val cardDeleteListener: (DataWrapper.CardData) -> Unit,
+    private val glide: RequestManager
+) : ListAdapter<DataWrapper, BaseViewHolder<*>>(
     RecyclerViewDiffUtil()
 ) {
 
     override fun getItemViewType(position: Int): Int {
-        return when(getItem(position)) {
+        return when (getItem(position)) {
             is DataWrapper.CarouselData -> R.layout.carousel_view_holder
             is DataWrapper.CardData -> R.layout.card_view_holder
         }
     }
-
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
