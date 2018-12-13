@@ -10,7 +10,10 @@ interface CountryDao {
     fun getAll(): LiveData<List<Country>>
 
     @Query("SELECT * FROM country WHERE id IN (:id)")
-    fun getById(id: Int): LiveData<Country>
+    fun getById(id: Int): Country
+
+    @Query("SELECT * FROM country WHERE id IN (:id)")
+    fun getByIdLive(id: Int): LiveData<Country>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(country: Country)

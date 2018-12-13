@@ -90,9 +90,7 @@ class MainViewModel (private val stateReducer: StateReducer,
     override fun onCarouselItemClicked(carouselItem: CarouselItem) {
         when (carouselItem.type) {
             CarouselType.CITY -> openCity(carouselItem.id)
-            else -> {
-                openCarouselItemLiveEvent.value = carouselItem.id
-            }
+            CarouselType.COUNTRY -> openCountry(carouselItem.id)
         }
     }
 
@@ -102,6 +100,11 @@ class MainViewModel (private val stateReducer: StateReducer,
 
     override fun onCardDeleted(card: DataWrapper.CardData) {
         countryRepository.delete(card.id)
+    }
+
+    private fun openCountry(id: Int) = uiScope.launch {
+        val country = countryRepository.getById(id)
+        withContext(Dispatchers.Main) { openCarouselItemLiveEvent.value = country.id }
     }
 
     private fun openCity(id: Int) = uiScope.launch {

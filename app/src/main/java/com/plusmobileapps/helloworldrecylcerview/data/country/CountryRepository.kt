@@ -5,25 +5,27 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 
-class CountryRepository(private val countryDao: CountryDao) : CountryDao {
+class CountryRepository(private val countryDao: CountryDao) {
 
-    override fun getAll(): LiveData<List<Country>> = countryDao.getAll()
+    fun getAll(): LiveData<List<Country>> = countryDao.getAll()
 
-    override fun getById(id: Int) = countryDao.getById(id)
+    fun getById(id: Int): Country = countryDao.getById(id)
 
-    override fun insert(country: Country) {
+    fun getByIdLive(id: Int): LiveData<Country> = countryDao.getByIdLive(id)
+
+    fun insert(country: Country) {
         GlobalScope.launch {
             countryDao.insert(country)
         }
     }
 
-    override fun delete(country: Country) {
+    fun delete(country: Country) {
         GlobalScope.launch {
             countryDao.delete(country)
         }
     }
 
-    override fun delete(countryId: Int) {
+    fun delete(countryId: Int) {
         GlobalScope.launch {
             countryDao.delete(countryId)
         }

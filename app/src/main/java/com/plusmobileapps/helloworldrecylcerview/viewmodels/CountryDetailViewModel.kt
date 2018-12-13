@@ -10,7 +10,7 @@ import com.plusmobileapps.helloworldrecylcerview.data.country.CountryRepository
 class CountryDetailViewModel(private val countryRepository: CountryRepository,
                              private val cityRepository: CityRepository) : ViewModel() {
 
-    fun getCountry(id: Int): LiveData<Country> = countryRepository.getById(id)
+    fun getCountry(id: Int): LiveData<Country> = countryRepository.getByIdLive(id)
 
     fun getCity(id: Int): LiveData<City> = cityRepository.getById(id)
 
