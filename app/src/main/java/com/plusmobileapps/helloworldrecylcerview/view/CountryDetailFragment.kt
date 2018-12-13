@@ -11,12 +11,16 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.plusmobileapps.helloworldrecylcerview.R
 import com.plusmobileapps.helloworldrecylcerview.viewmodels.CountryDetailViewModel
+import org.jetbrains.anko.bundleOf
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.lang.IllegalStateException
 
 private const val COUNTRY_ID = "country id"
+private const val CITY_ID = "city id"
 
 class CountryDetailFragment : Fragment() {
-    private var id: Int? = null
+    private var countryId: Int? = null
+    private var cityId: Int? = null
     private lateinit var imageView: ImageView
     private lateinit var header: TextView
     private lateinit var body: TextView
@@ -26,7 +30,16 @@ class CountryDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            id = it.getInt(COUNTRY_ID)
+            countryId = it.getInt(COUNTRY_ID)
+            cityId = it.getInt(CITY_ID)
+
+            if (countryId == 0) {
+                countryId = null
+            }
+
+            if (cityId == 0) {
+                cityId = null
+            }
         }
     }
 
@@ -45,23 +58,38 @@ class CountryDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val countryId = id ?: throw IllegalStateException("No id was set on this fragment")
-        val card = viewModel.getCountry(countryId)
-        card.observe(this, Observer { country ->
-            Glide.with(this).load(country.imageUrl).into(imageView)
-            header.text = country.name
-            body.text = country.description
-        })
+
+        if (countryId == null && cityId == null) throw IllegalStateException("No city or country id set for this fragment")
+
+        countryId?.let {
+            viewModel.getCountry(it).observe(this, Observer { country ->
+                header.text = country.name
+                body.text = country.description
+                Glide.with(this).load(country.imageUrl).into(imageView)
+            })
+        }
+
+        cityId?.let {
+            viewModel.getCity(it).observe(this, Observer { city ->
+                header.text = city.name
+                body.text = city.description
+                Glide.with(this).load(city.imageUrl).into(imageView)
+            })
+        }
 
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(countryId: Int) =
+        fun newInstanceForCountry(countryId: Int) =
             CountryDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(COUNTRY_ID, countryId)
-                }
+                arguments = bundleOf(COUNTRY_ID to countryId)
             }
+
+        @JvmStatic
+        fun newInstanceForCity(cityId: Int) =
+                CountryDetailFragment().apply {
+                    arguments = bundleOf(CITY_ID to cityId)
+                }
     }
 }

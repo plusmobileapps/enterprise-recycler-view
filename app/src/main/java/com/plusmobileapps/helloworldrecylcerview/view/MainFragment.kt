@@ -47,11 +47,23 @@ class MainFragment : Fragment() {
             openCarouselItemLiveEvent.observe(this@MainFragment, Observer { id ->
                 openCarouselItem(id)
             })
+
+            openCityEvent.observe(this@MainFragment, Observer { id ->
+                openCity(id)
+            })
         }
     }
 
     private fun openCard(id: Int) {
-        val fragment = CountryDetailFragment.newInstance(id)
+        val fragment = CountryDetailFragment.newInstanceForCountry(id)
+        fragmentManager?.transaction {
+            replace(R.id.fragment_container, fragment)
+            addToBackStack(null)
+        }
+    }
+
+    private fun openCity(id: Int) {
+        val fragment = CountryDetailFragment.newInstanceForCity(id)
         fragmentManager?.transaction {
             replace(R.id.fragment_container, fragment)
             addToBackStack(null)
@@ -59,7 +71,7 @@ class MainFragment : Fragment() {
     }
 
     private fun openCarouselItem(id: Int) {
-        val fragment = CountryDetailFragment.newInstance(id)
+        val fragment = CountryDetailFragment.newInstanceForCountry(id)
         fragmentManager?.transaction {
             replace(R.id.fragment_container, fragment)
             addToBackStack(null)

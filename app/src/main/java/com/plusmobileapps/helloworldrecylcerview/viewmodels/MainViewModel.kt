@@ -6,7 +6,9 @@ import com.plusmobileapps.helloworldrecylcerview.StateReducer
 import com.plusmobileapps.helloworldrecylcerview.data.cities.CityRepository
 import com.plusmobileapps.helloworldrecylcerview.data.country.CountryRepository
 import com.plusmobileapps.helloworldrecylcerview.view.CarouselItem
+import com.plusmobileapps.helloworldrecylcerview.view.CarouselType
 import com.plusmobileapps.helloworldrecylcerview.view.DataWrapper
+import kotlinx.coroutines.*
 
 interface MainView {
     fun onCarouselItemClicked(carouselItem: CarouselItem)
@@ -33,6 +35,15 @@ class MainViewModel (private val stateReducer: StateReducer,
                      private val cityRepository: CityRepository
 ) : ViewModel(), MainView {
 
+    private val viewModelJob = Job()
+
+    private val uiScope = CoroutineScope(Dispatchers.IO + viewModelJob)
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
+
     private val bigCards: LiveData<List<Card>> = Transformations.map(countryRepository.getAll()) { countries ->
         return@map countries.map { country ->
             Card(
@@ -46,13 +57,13 @@ class MainViewModel (private val stateReducer: StateReducer,
 
     private val topCarousel: LiveData<List<CarouselItem>> = Transformations.map(cityRepository.getAll()) { cities ->
         return@map cities.map { city ->
-            CarouselItem(city.id!!, city.name, city.description)
+            CarouselItem(city.id!!, city.name, city.description, CarouselType.CITY)
         }
     }
 
     private val bottomCarousel: LiveData<List<CarouselItem>> = Transformations.map(countryRepository.getAll()) { countries ->
         return@map countries.map { country ->
-            CarouselItem(country.id!!, country.name, country.description)
+            CarouselItem(country.id!!, country.name, country.description, CarouselType.COUNTRY)
         }
     }
 
@@ -74,9 +85,15 @@ class MainViewModel (private val stateReducer: StateReducer,
     fun getData(): LiveData<List<DataWrapper>> = mediator
     val openCardLiveEvent = SingleLiveEvent<Int>()
     val openCarouselItemLiveEvent = SingleLiveEvent<Int>()
+    val openCityEvent = SingleLiveEvent<Int>()
 
     override fun onCarouselItemClicked(carouselItem: CarouselItem) {
-        openCarouselItemLiveEvent.value = carouselItem.id
+        when (carouselItem.type) {
+            CarouselType.CITY -> openCity(carouselItem.id)
+            else -> {
+                openCarouselItemLiveEvent.value = carouselItem.id
+            }
+        }
     }
 
     override fun onCardClicked(card: DataWrapper.CardData) {
@@ -86,4 +103,10 @@ class MainViewModel (private val stateReducer: StateReducer,
     override fun onCardDeleted(card: DataWrapper.CardData) {
         countryRepository.delete(card.id)
     }
+
+    private fun openCity(id: Int) = uiScope.launch {
+        val city = cityRepository.getByIdWithCoroutines(id)
+        withContext(Dispatchers.Main) { openCityEvent.value = city.id }
+    }
+
 }

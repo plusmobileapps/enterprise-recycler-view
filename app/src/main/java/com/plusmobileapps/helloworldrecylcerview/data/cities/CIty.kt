@@ -17,6 +17,9 @@ data class City(
     val description: String,
 
     @ColumnInfo(name = "country")
-    val country: String
+    val country: String,
+
+    @ColumnInfo(name = "imageUrl")
+    val imageUrl: String
 
 )

@@ -9,6 +9,8 @@ import com.plusmobileapps.helloworldrecylcerview.data.cities.City
 import com.plusmobileapps.helloworldrecylcerview.data.cities.CityDao
 import com.plusmobileapps.helloworldrecylcerview.data.country.Country
 import com.plusmobileapps.helloworldrecylcerview.data.country.CountryDao
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 
 @Database(entities = arrayOf(Country::class, City::class), version = 1)
@@ -36,7 +38,7 @@ abstract class AppDatabase : RoomDatabase() {
             ).addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    doAsync {
+                    GlobalScope.launch {
                         val roomDatabase = getInstance(context)
                         insertCities(roomDatabase.cityDao())
                         insertCountries(roomDatabase.countryDao())
@@ -49,34 +51,38 @@ abstract class AppDatabase : RoomDatabase() {
 
 }
 
-fun insertCities(cityDao: CityDao) {
+fun insertCities(cityDao: CityDao) = {
     with(cityDao) {
         insert(
             City(
                 name = "Hamburg",
                 country = "Germany",
-                description = "Hamburg is the second-largest city in Germany with a population of over 1.8 million. One of Germany's 16 federal states, it is surrounded by Schleswig-Holstein ..."
+                description = "Hamburg is the second-largest city in Germany with a population of over 1.8 million. One of Germany's 16 federal states, it is surrounded by Schleswig-Holstein ...",
+                imageUrl = "https://imageresizer.static9.net.au/xCA7QJzMZ-wE57NrKAmiAwYaQvg=/600x338/smart/http%3A%2F%2Fprod.static9.net.au%2F_%2Fmedia%2F2018%2F05%2F01%2F14%2F32%2F1_Speicherstadt_hero.jpg"
             )
         )
         insert(
             City(
                 name = "Seattle",
                 country = "USA",
-                description = "Seattle is a seaport city on the West Coast of the United States. It is the seat of King County, Washington. With an estimated 730,000 residents as of 2018, Seattle ..."
+                description = "Seattle is a seaport city on the West Coast of the United States. It is the seat of King County, Washington. With an estimated 730,000 residents as of 2018, Seattle ...",
+                imageUrl = "https://www.nationalgeographic.com/content/dam/travel/Guide-Pages/north-america/seattle-travel.adapt.1900.1.jpg"
             )
         )
         insert(
             City(
                 name = "London",
                 country = "UK",
-                description = "London is the capital and largest city of both the United Kingdom and England. Standing on the River Thames in southeastern England, 50 miles (80 km) ..."
+                description = "London is the capital and largest city of both the United Kingdom and England. Standing on the River Thames in southeastern England, 50 miles (80 km) ...",
+                imageUrl = "https://cdn.londonandpartners.com/visit/general-london/areas/river/76709-640x360-houses-of-parliament-and-london-eye-on-thames-from-above-640.jpg"
             )
         )
         insert(
             City(
                 name = "Paris",
                 country = "France",
-                description = "Paris is the capital and most populous city of France, with an area of 105 square kilometres (41 square miles) and a population of 2,206,488. Since the 17th ..."
+                description = "Paris is the capital and most populous city of France, with an area of 105 square kilometres (41 square miles) and a population of 2,206,488. Since the 17th ...",
+                imageUrl = "https://photos.mandarinoriental.com/is/image/MandarinOriental/paris-2017-home?wid=2880&hei=1280&fmt=jpeg&crop=9,336,2699,1200&anchor=1358,936&qlt=75,0&fit=wrap&op_sharpen=0&resMode=sharp2&op_usm=0,0,0,0&iccEmbed=0&printRes=72"
             )
         )
     }

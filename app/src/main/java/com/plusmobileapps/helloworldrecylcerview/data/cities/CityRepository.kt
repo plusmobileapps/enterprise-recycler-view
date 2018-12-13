@@ -4,19 +4,21 @@ import androidx.lifecycle.LiveData
 import kotlinx.coroutines.*
 import org.jetbrains.anko.doAsync
 
-class CityRepository(private val cityDao: CityDao) : CityDao {
+class CityRepository(private val cityDao: CityDao) {
 
-    override fun getAll(): LiveData<List<City>> = cityDao.getAll()
+    fun getAll(): LiveData<List<City>> = cityDao.getAll()
 
-    override fun getById(id: Int): LiveData<City> = cityDao.getById(id)
+    fun getById(id: Int): LiveData<City> = cityDao.getById(id)
 
-    override fun insert(city: City) {
+    suspend fun getByIdWithCoroutines(id: Int) = cityDao.getByIdNotLive(id)
+
+    fun insert(city: City) {
         GlobalScope.launch {
             cityDao.insert(city)
         }
     }
 
-    override fun delete(city: City) {
+    fun delete(city: City) {
         GlobalScope.launch {
             cityDao.delete(city)
         }

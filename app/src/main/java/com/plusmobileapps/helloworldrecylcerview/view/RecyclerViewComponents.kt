@@ -38,11 +38,14 @@ sealed class DataWrapper {
         DataWrapper()
 }
 
+enum class CarouselType {
+    COUNTRY, CITY
+}
 
 /**
  * model for the carousel view holder item that is a nested recyclerview
  */
-data class CarouselItem(val id: Int, val header: String, val body: String)
+data class CarouselItem(val id: Int, val header: String, val body: String, val type: CarouselType)
 
 
 /**

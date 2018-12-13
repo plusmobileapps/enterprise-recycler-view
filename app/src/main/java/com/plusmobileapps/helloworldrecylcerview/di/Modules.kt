@@ -19,6 +19,6 @@ val appModule = module {
     single { CountryRepository(get()) }
     factory { StateReducer() }
     viewModel { MainViewModel(get(), get(), get()) }
-    viewModel { CountryDetailViewModel(get()) }
+    viewModel { CountryDetailViewModel(get(), get()) }
 
 }
