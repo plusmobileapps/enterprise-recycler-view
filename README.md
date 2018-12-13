@@ -4,6 +4,8 @@ This is a sample app to illustrate a pattern for implementing an abstracted out 
 
 ![basic architecture](https://github.com/plusmobileapps/enterprise-recycler-view/blob/master/Enterprise%20RecyclerView.png)
 
+![demo](https://github.com/plusmobileapps/enterprise-recycler-view/blob/master/sample_demo.mp4.gif)
+
 ### Tools
 
 * [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - used for all asynchronous work
