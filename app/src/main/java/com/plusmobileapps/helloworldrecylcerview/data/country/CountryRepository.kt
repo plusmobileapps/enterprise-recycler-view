@@ -1,6 +1,8 @@
 package com.plusmobileapps.helloworldrecylcerview.data.country
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 
 class CountryRepository(private val countryDao: CountryDao) : CountryDao {
@@ -10,19 +12,19 @@ class CountryRepository(private val countryDao: CountryDao) : CountryDao {
     override fun getById(id: Int) = countryDao.getById(id)
 
     override fun insert(country: Country) {
-        doAsync {
+        GlobalScope.launch {
             countryDao.insert(country)
         }
     }
 
     override fun delete(country: Country) {
-        doAsync {
+        GlobalScope.launch {
             countryDao.delete(country)
         }
     }
 
     override fun delete(countryId: Int) {
-        doAsync {
+        GlobalScope.launch {
             countryDao.delete(countryId)
         }
     }

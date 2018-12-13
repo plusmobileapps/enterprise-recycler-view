@@ -1,6 +1,7 @@
 package com.plusmobileapps.helloworldrecylcerview.data.cities
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.*
 import org.jetbrains.anko.doAsync
 
 class CityRepository(private val cityDao: CityDao) : CityDao {
@@ -10,13 +11,13 @@ class CityRepository(private val cityDao: CityDao) : CityDao {
     override fun getById(id: Int): LiveData<City> = cityDao.getById(id)
 
     override fun insert(city: City) {
-        doAsync {
+        GlobalScope.launch {
             cityDao.insert(city)
         }
     }
 
     override fun delete(city: City) {
-        doAsync {
+        GlobalScope.launch {
             cityDao.delete(city)
         }
     }
